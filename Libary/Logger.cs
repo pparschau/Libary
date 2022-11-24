@@ -14,7 +14,7 @@ namespace Libary
         static string ProjectName = System.Reflection.Assembly.GetEntryAssembly().GetName().Name;
         static string CurrentUserName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
 
-        static private string LogDBConnectionString = "Server = 0199z0ndbbwpl01 ; Integrated Security = True; Initial Catalog = NIT;";
+        static private string LogDBConnectionString = "Server = localhost ; Integrated Security = True; Initial Catalog = Logger;";
 
 
 
