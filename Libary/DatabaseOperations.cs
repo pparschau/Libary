@@ -19,7 +19,7 @@ namespace Libary
 
             string TrimmedConnectionString = ConnectionString.Substring(PositionObject + EqualsPosition);
 
-            string ObjectResult = TrimmedConnectionString.Substring(0, TrimmedConnectionString.IndexOf(";")).Replace(" ", "");
+            string ObjectResult = TrimmedConnectionString.Substring(0, TrimmedConnectionString.IndexOf(";")).Trim();
 
             return ObjectResult;
         }
