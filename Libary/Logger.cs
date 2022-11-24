@@ -64,7 +64,6 @@ namespace Libary
             string Minute = DateTime.Now.ToString("mm");
             string Second = DateTime.Now.ToString("ss");
 
-
             try {
 
                 #region Directory and Logfile
