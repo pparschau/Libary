@@ -11,9 +11,9 @@ namespace Libary
         static void Main(string[] args)
         {
 
+            Logger.Log(1,"TestAction","Erro at...");
 
-
-
+            Console.Read();
         }
     }
 }

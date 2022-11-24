@@ -37,7 +37,7 @@ namespace Libary
             //3=Error
 
 
-            //LogToFile(ErrorLevel,Action,Message);
+            LogToFile(ErrorLevel,Action,Message);
 
             LogToDatabase(ErrorLevel, Action, Message);
 
@@ -87,7 +87,7 @@ namespace Libary
                 {
                     File.Create(LoggerPath + Year + "/" + Month + "/" + Day + "/" + ProjectName + ".txt").Close();
                 }
-    #endregion
+                #endregion
 
                 string LogLine = "  " +   ErrorLevel + "  | " + Day + "." + Month + "." + Year + " " + Hour +":"+ Minute +":"+ Second + " | " + Action + " | " + Message + " | " + CurrentUserName +  Environment.NewLine;
                 File.AppendAllText(LoggerPath + Year + "/" + Month + "/" + Day + "/" + ProjectName + ".txt", LogLine);
@@ -101,95 +101,67 @@ namespace Libary
 
         public static void LogToDatabase(int ErrorLevel, string Action, string Message)
         {
-
             CheckTableForLogging();
 
             if (String.IsNullOrEmpty(Message))
-
-            { Message = ""; }
-
-
-
-            Console.WriteLine(Action);
-
-
+            { 
+                Message = "";
+            }
 
             SqlConnection sqldbConnection = new SqlConnection(LogDBConnectionString);
 
+            string InsertLogSQL = $@"INSERT INTO [dbo].[Logger_{ProjectName}]
 
-
-            string sql = $@"INSERT INTO [dbo].[{ProjectName}_Logger]
-
-           (
+            (
             [User],
             [Level],
             [Action],
             [Message],
-            [Timstamp]
-           )
+            [Timestamp]
+            )
 
             VALUES
 
-           (SYSTEM_USER," + ErrorLevel + ",'" + Action + @"',
-
-           '" + Message.Replace(@"'", @" ") + @"'
-
-           ,getdate()" + ")";
+            (SYSTEM_USER," + ErrorLevel + ",'" + Action + @"','" + Message.Replace(@"'", @" ") + @"',getdate()" + ")";
 
 
+            DatabaseOperations.InsertOrUpdate(LogDBConnectionString, InsertLogSQL);
 
-            try
-
-            {
-
-                using (SqlCommand querySaveStaff = new SqlCommand(sql))
-
-                {
-                    querySaveStaff.Connection = sqldbConnection;
-                    sqldbConnection.Open();
-                    querySaveStaff.ExecuteNonQuery();
-                    sqldbConnection.Close();
-                }
-
-            }
-
-            catch (SqlException ex)
-
-            {
-
-                Console.WriteLine("Logging DB Error: ", ex.ToString());
-
-                ErrorLevel = 3;
-
-            }
         }
 
 
         public static void CheckTableForLogging()
         {
 
+            if(DatabaseOperations.CheckIfDBExists(LogDBConnectionString,"Logger",true))
+            { 
             if (!DatabaseOperations.CheckIfDBTableExists(LogDBConnectionString, "Logger_" + ProjectName))
             {
+                string CreateTableScript = $@"
+                
+                USE [{DatabaseOperations.ExtractConnectionString(LogDBConnectionString, "Initial Catalog")}]
 
-
-            }
-
-            string CreateTableScript = $@"USE [{DatabaseOperations.ExtractConnectionString(LogDBConnectionString, "Initial Catalog")}]
-
-            CREATE TABLE[dbo].[Logger_{ProjectName}] (
+                CREATE TABLE[dbo].[Logger_{ProjectName}] (
 
                    [User][nvarchar](100) NULL,
-
                    [Level][int] NULL,
-
                    [Action][text] NULL,
-
                    [Message][text] NULL,
+                   [Timestamp][datetime] NULL);";
 
-                   [Timestamp][datetime] NULL
 
-            ) ON[PRIMARY] TEXTIMAGE_ON[PRIMARY] ";
+
+                  DatabaseOperations.InsertOrUpdate(LogDBConnectionString, CreateTableScript);
+
+
+
+                  Console.WriteLine("Logging Table succesfully created at " + LogDBConnectionString + " "+ $"[dbo].[Logger_{ ProjectName}]");
+                    }
+                }
+             
+            
+            }
 
         }
-    }
+    
 }
