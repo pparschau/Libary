@@ -27,15 +27,10 @@ namespace Libary
 
         public static void Log(int ErrorLevel,string Action,string Message)
         {
-
             //ErrorLevel
-
             //1=Info
-
             //2=Warning
-
             //3=Error
-
 
             LogToFile(ErrorLevel,Action,Message);
 

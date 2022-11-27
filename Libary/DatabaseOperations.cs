@@ -157,7 +157,7 @@ namespace Libary
                 catch (Exception ex)
                 {
                     Exists = false;
-                    Logger.Log(3, "CheckIfDBExists", Ex.ToString());
+                    Logger.Log(3, "CheckIfDBExists", ex.ToString());
                 }
                 finally
                 {
