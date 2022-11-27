@@ -89,6 +89,7 @@ namespace Libary
             catch(Exception Ex)
             {
                 Status = "n.A.";
+                Logger.Log(2, "GetServiceStatus", Ex.ToString());
             }
 
 
