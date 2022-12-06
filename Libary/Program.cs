@@ -12,11 +12,17 @@ namespace Libary
         static void Main(string[] args)
         {
 
-            Logger.Log(1,"TestAction","Erro at...");
+          //  Logger.Log(1,"TestAction","Erro at...");
 
-            Console.WriteLine(WindowsServices.GetServiceStatus(null, "MSSQLSERVER1"));
+   //         Console.WriteLine(WindowsServices.GetServiceStatus(null, "MSSQLSERVER1"));
 
 
+            List<string> list = new List<string>();
+            list.Add("5000");
+            list.Add("1000");
+            list.Add("1000");
+
+           Task.WhenAll(Async.ControlAsync(list));
 
             Console.Read();
         }
