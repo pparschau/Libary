@@ -22,7 +22,11 @@ namespace Libary
             list.Add("1000");
             list.Add("1000");
 
-           Task.WhenAll(Async.ControlAsync(list));
+    //       Task.WhenAll(Async.ControlAsync(list));
+
+
+
+            DatabaseOperations.GenerateCreateTableScript("Server = Mainframe ; Integrated Security = True; Initial Catalog = InstantSupport;","1000_CopyJob");
 
             Console.Read();
         }
